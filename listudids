@@ -1,0 +1,42 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  printf "Please provide an ipa file. Usage: listudids file_name.ipa [-all]\n"
+  exit
+fi
+
+if [ -n "$2" ] && [ "$2" == "-all" ]; then
+  all="all"
+fi
+
+FILE=$1
+if [ -f $FILE ]; then
+  printf "Finding udids in '%s'...\n" $FILE
+  IFS=$'\n'
+  alludids=""
+  for provisionFile in $( unzip -l $FILE | grep embedded.mobileprovision | awk '{$1=$2=$3=""; print $0}' | sed "s/^[ \t]*//" ); do
+
+    out=$(unzip -p $FILE $provisionFile | strings | awk '/ProvisionedDevices/,/\/array/'| grep string | sed 's/<[/]*string>//g' | sed 's/^/  /g')
+    number=$(echo "$out" | wc -l |xargs)
+
+    alludids=$(printf "%s\n$s" $alludids $out)
+
+    printf "%s udids in %s \n" $number $provisionFile;
+    if [ -n "$all" ]; then
+      for udid in $out; do
+        printf " %s\n" $udid
+      done
+    fi
+  done
+
+  printf "Here are the udids we found:\n"
+
+  for udid in $alludids; do
+    printf "%s\n" $udid
+  done | sort | uniq
+
+else
+  echo "The File '$FILE' Does Not Exist"
+  exit
+fi
+
