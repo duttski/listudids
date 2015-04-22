@@ -3,7 +3,7 @@ List udids found in an IPA file
 
 ## install
 
-Put the file somewhere in your PATH.
+Put the script somewhere in your PATH, or just run it directly.
 
 ## use
 
