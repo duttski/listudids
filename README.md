@@ -1,5 +1,7 @@
 # listudids
-List udids found in an IPA file
+List udids found in an IPA file, without extracting the whole archive.
+
+Works by searching for embedded.mobileprovision file(s) and selectively extracting them and printing a sorted, unique list of UDIDs.
 
 ## install
 
