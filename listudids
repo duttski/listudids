@@ -17,7 +17,6 @@ if [ -f "$FILE" ]; then
   for provisionFile in $( unzip -l "$FILE" | grep embedded.mobileprovision | awk '{$1=$2=$3=""; print $0}' | sed "s/^[ \t]*//" ); do
 
     out=$(unzip -p $FILE $provisionFile | strings | awk '/ProvisionedDevices/,/\/array/'| grep string | sed 's/<[/]*string>//g' | sed 's/^/  /g')
-    echo "$out"
     number=$(echo "$out" |grep \[A-Za-z0-9] | wc -l |xargs)
 
     alludids=$(printf "%s\n$s" $alludids $out)
